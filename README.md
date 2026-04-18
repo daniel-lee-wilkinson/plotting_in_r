@@ -1,102 +1,45 @@
-# plotting_in_r
+# Plotting in R: Tufte Visualization Principles
 
-An R project for exploratory data analysis and visualisation of environmental
-data, using [`renv`](https://rstudio.github.io/renv/) for reproducible package
-management and [Quarto](https://quarto.org/) for literate analysis documents.
+This repository contains practice exercises for creating data visualizations in R that follow Edward Tufte's principles of effective graphical design.
 
----
+## Contents
 
-## Project Structure
+- **tufte_visualization_exercises.qmd** - Quarto document with 10 practice exercises focused on Tufte graphing principles
+- **sample_data.csv** - Sample sales dataset for the exercises
+- **generate_sample_data.R** - R script to regenerate the sample dataset
 
-```
-plotting_in_r/
-├── plotting_in_r.Rproj      # RStudio project file
-├── .Rprofile                # Activates renv on startup
-├── renv.lock                # Pinned package versions (commit this)
-├── renv/
-│   └── activate.R           # renv bootstrap loader
-├── data/
-│   └── environmental_data.csv  # Sample environmental dataset (100 rows)
-└── analysis/
-    └── environmental_analysis.qmd  # Quarto analysis script
-```
+## Getting Started
 
----
+1. Ensure you have R and RStudio installed
+2. Install required packages:
+   ```r
+   install.packages(c("tidyverse", "ggplot2", "ggthemes", "quarto"))
+   ```
+3. Open `tufte_visualization_exercises.qmd` in RStudio
+4. Work through the exercises, creating visualizations that maximize data-ink ratio and minimize chartjunk
 
-## Setup
+## Tufte's Key Principles
 
-### Prerequisites
+The exercises cover:
+- **Data-ink ratio**: Maximizing the proportion of ink devoted to data
+- **Minimizing chartjunk**: Removing unnecessary decorative elements
+- **Small multiples**: Using repetition for comparison
+- **Integrated text and graphics**: Placing labels close to data
+- **Honest representation**: Using appropriate scales and avoiding misleading visuals
 
-| Tool | Version |
-|---|---|
-| R | ≥ 4.4 |
-| Quarto CLI | ≥ 1.5 |
+## Dataset
 
-### 1. Clone the repository
+The sample dataset includes sales data across:
+- 4 years (2020-2023)
+- 4 regions (North, South, East, West)
+- 3 products (Product_A, Product_B, Product_C)
+- Metrics: revenue, units_sold, customer_satisfaction, market_share
 
+## Rendering the Quarto Document
+
+To render the exercises to HTML:
 ```bash
-git clone https://github.com/daniel-lee-wilkinson/plotting_in_r.git
-cd plotting_in_r
+quarto render tufte_visualization_exercises.qmd
 ```
 
-### 2. Open the project in RStudio
-
-Open `plotting_in_r.Rproj` in RStudio.  
-The `.Rprofile` will automatically activate the `renv` environment on startup.
-
-### 3. Restore the R package library
-
-```r
-renv::restore()
-```
-
-This installs all packages listed in `renv.lock` into the project-local library.
-
-### 4. Render the Quarto document
-
-Either click **Render** in RStudio, or run from the terminal:
-
-```bash
-quarto render analysis/environmental_analysis.qmd
-```
-
-The rendered HTML report is written to `analysis/environmental_analysis.html`.
-
----
-
-## Dataset — `data/environmental_data.csv`
-
-100 simulated field observations across major US national parks.
-
-| Variable | Type | Description |
-|---|---|---|
-| `sample_id` | String | Unique record ID (e.g. `ENV_001`) |
-| `date` | String | Date of observation (`YYYY-MM-DD`) |
-| `location` | String | National park name |
-| `observer_name` | String | Field observer's name |
-| `season` | Categorical | `Spring`, `Summer`, `Autumn`, `Winter` |
-| `weather_condition` | Categorical | `Clear`, `Partly Cloudy`, `Overcast`, `Light Rain`, `Heavy Rain`, `Foggy`, `Snowy` |
-| `land_use_type` | Categorical | `Forest`, `Grassland`, `Wetland`, `Desert`, `Alpine`, `Coastal`, `Urban Fringe` |
-| `temperature_c` | Numerical | Air temperature (°C) |
-| `humidity_pct` | Numerical | Relative humidity (%) |
-| `wind_speed_kmh` | Numerical | Wind speed (km/h) |
-| `precipitation_mm` | Numerical | Precipitation (mm) |
-| `air_quality_index` | Numerical | AQI score |
-| `uv_index` | Numerical | UV radiation index (0–11) |
-| `visibility_km` | Numerical | Atmospheric visibility (km) |
-
----
-
-## Package Management with renv
-
-This project uses [`renv`](https://rstudio.github.io/renv/) to create a
-reproducible, project-local R library.
-
-| Command | Purpose |
-|---|---|
-| `renv::restore()` | Install packages from `renv.lock` |
-| `renv::install("pkg")` | Add a new package |
-| `renv::snapshot()` | Update `renv.lock` after adding packages |
-| `renv::status()` | Check library vs lockfile consistency |
-
-> **Tip:** Commit `renv.lock` but **not** `renv/library/` (already in `.gitignore`).
+Or use the "Render" button in RStudio.
