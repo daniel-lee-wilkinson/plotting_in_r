@@ -62,6 +62,7 @@ data |>
   ggplot(aes(x = year, y = revenue, color = product)) +
   geom_line() +
   facet_wrap(~ region) +
+labs(x = "Year", y="Revenue (USD)") +
 theme(
   panel.grid        = element_blank(),
   panel.border      = element_blank(),
@@ -92,10 +93,33 @@ theme(
 
 ```{r exercise-2}
 # YOUR CODE HERE
+data <- data |> mutate(product = gsub("_", " ", product))
+data |> 
+  filter(year == "2023") |> 
+  ggplot(aes(x = product, y = revenue)) + 
 
-
-
-
+  geom_col(fill = "lightgrey") + 
+  geom_hline(yintercept = seq(0, max(data$revenue), by = 50000),
+             colour = "white", linewidth = 0.1) +
+  facet_wrap(~ region, labeller = labeller(region = toupper)) +
+  theme(
+    panel.grid       = element_blank(),
+    panel.border     = element_blank(),
+    axis.line        = element_line(colour = "black", linewidth = 0.3),
+    panel.background = element_blank(),
+    axis.line.x      = element_blank(),
+    axis.ticks.x     = element_blank(),
+    axis.line.y      = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.text.y  = element_blank(),
+  axis.title.y = element_blank(),
+    strip.background = element_blank(),
+    legend.position  = "none"
+  ) +
+theme(strip.text = element_text(size = 11)) +
+scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+geom_text(aes(label = scales::comma(revenue)), vjust = -0.5, size = 3) +
+  labs(x = "", y = "Revenue (USD)", title = "Product C generates most revenue in all regions in 2023")
 ```
 
 **Expected Output**: A clean, uncluttered bar chart that focuses attention on the data values.
