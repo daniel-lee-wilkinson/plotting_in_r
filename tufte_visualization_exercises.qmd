@@ -135,9 +135,44 @@ geom_text(aes(label = scales::comma(revenue)), vjust = -0.5, size = 3) +
 ```{r exercise-3}
 # YOUR CODE HERE
 
+data <- data |> mutate(product = gsub("_", " ", product))
 
+ggplot(data, aes(x = year, y = revenue, col = product)) + 
+  geom_line() + 
+  geom_point(size = 1.5, shape = 21, fill = "white", stroke = 0.4) +
+  facet_wrap(~ region, labeller = labeller(region = toupper)) +
+  scale_colour_manual(values = c("Product A" = "grey60", 
+                                 "Product B" = "grey40", 
+                                 "Product C" = "#4a90a4")) +
 
-
+scale_y_continuous(
+  limits = c(80000, 240000),
+  breaks = c(80000, 120000, 160000, 200000, 240000),
+  labels = scales::comma,
+  expand = c(0, 0)
+)+
+  theme(
+    panel.grid       = element_blank(),
+    panel.border     = element_blank(),
+    axis.line        = element_line(colour = "black", linewidth = 0.3),
+    panel.background = element_blank(),
+    axis.line.x      = element_blank(),
+    axis.ticks.x     = element_blank(),
+    axis.title.y     = element_blank(),
+    strip.background = element_blank(),
+    legend.position  = "none",
+    plot.margin      = margin(r = 10)
+  ) +
+theme(panel.spacing.x = unit(1, "cm"),
+     panel.spacing.y = unit(1, "cm")) +
+geom_text(
+  data = data |> filter(year == max(year)),
+  aes(label = product),
+  hjust = 1, 
+  vjust = -0.5,
+  size = 2.5
+) +
+  labs(x = "", title = "Product C consistently generates the most revenue  (USD) in all regions")
 ```
 
 **Expected Output**: A panel of four charts showing regional trends in a compact, comparable format.
