@@ -13,12 +13,12 @@ editor: visual
 
 This document provides practice exercises in creating data visualizations that adhere to Edward Tufte's principles of effective graphical design. Tufte's principles emphasize:
 
-1. **Data-ink ratio**: Maximize the proportion of ink devoted to displaying actual data
-2. **Minimize chartjunk**: Remove unnecessary decorative elements
-3. **Show data variation, not design variation**: Let the data speak for itself
-4. **Use small multiples**: Facilitate comparison through repetition
-5. **Integrate text and graphics**: Labels should be close to the data they describe
-6. **Avoid misleading representations**: Use appropriate scales and proportions
+1.  **Data-ink ratio**: Maximize the proportion of ink devoted to displaying actual data
+2.  **Minimize chartjunk**: Remove unnecessary decorative elements
+3.  **Show data variation, not design variation**: Let the data speak for itself
+4.  **Use small multiples**: Facilitate comparison through repetition
+5.  **Integrate text and graphics**: Labels should be close to the data they describe
+6.  **Avoid misleading representations**: Use appropriate scales and proportions
 
 ## Dataset Description
 
@@ -47,41 +47,48 @@ data <- read_csv("sample_data.csv")
 glimpse(data)
 ```
 
----
+------------------------------------------------------------------------
 
 ## Exercise 1: High Data-Ink Ratio Line Chart
 
 **Task**: Create a line chart showing revenue trends over time for each product, applying Tufte's principle of maximizing the data-ink ratio.
 
-**Requirements**:
-- Remove unnecessary grid lines
-- Minimize or remove axis lines where appropriate
-- Use direct labels instead of a legend
-- Remove background shading
-- Keep only essential elements
+**Requirements**: - Remove unnecessary grid lines - Minimize or remove axis lines where appropriate - Use direct labels instead of a legend - Remove background shading - Keep only essential elements
 
 ```{r exercise-1}
 # YOUR CODE HERE
-
-
-
+data |>
+  mutate(region = factor(region, levels = c("North", "East", "South", "West"))) |>
+  ggplot(aes(x = year, y = revenue, color = product)) +
+  geom_line() +
+  facet_wrap(~ region) +
+theme(
+  panel.grid        = element_blank(),
+  panel.border      = element_blank(),
+  axis.line         = element_line(colour = "black", linewidth = 0.3),
+  panel.background  = element_blank()
+) +
+  geom_text(
+    data = data |> filter(year == max(year)),  # last point of each line
+    aes(label = product),
+    hjust = -0.1,    # nudge right of the line end
+    size = 3.5
+  ) +
+  theme(legend.position = "none") +
+  coord_cartesian(clip = "off") +  # allow labels to render outside plot area
+  theme(plot.margin = margin(r = 60))  # make room on the right for labels
 
 ```
 
 **Expected Output**: A clean line chart with minimal non-data ink, where product lines are clearly labeled and trends are easy to identify.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 2: Minimal Bar Chart
 
 **Task**: Create a bar chart comparing total revenue by region for 2023, following minimalist design principles.
 
-**Requirements**:
-- Remove grid lines
-- Remove chart borders
-- Use subtle colors or grayscale
-- Label bars directly (no legend needed)
-- Remove unnecessary axis elements
+**Requirements**: - Remove grid lines - Remove chart borders - Use subtle colors or grayscale - Label bars directly (no legend needed) - Remove unnecessary axis elements
 
 ```{r exercise-2}
 # YOUR CODE HERE
@@ -93,18 +100,13 @@ glimpse(data)
 
 **Expected Output**: A clean, uncluttered bar chart that focuses attention on the data values.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 3: Small Multiples for Comparison
 
 **Task**: Create small multiples (faceted plots) to compare revenue trends across all four regions over time.
 
-**Requirements**:
-- Use faceting to create one subplot per region
-- Maintain consistent scales for valid comparison
-- Minimize repetitive axis labels
-- Remove unnecessary decorative elements
-- Ensure each panel is clearly labeled
+**Requirements**: - Use faceting to create one subplot per region - Maintain consistent scales for valid comparison - Minimize repetitive axis labels - Remove unnecessary decorative elements - Ensure each panel is clearly labeled
 
 ```{r exercise-3}
 # YOUR CODE HERE
@@ -116,17 +118,13 @@ glimpse(data)
 
 **Expected Output**: A panel of four charts showing regional trends in a compact, comparable format.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 4: Dot Plot Instead of Bar Chart
 
 **Task**: Replace a traditional bar chart with a dot plot (Cleveland dot plot) to show market share by product in 2023. Dot plots often have better data-ink ratios than bar charts.
 
-**Requirements**:
-- Use points instead of bars
-- Include reference lines only where they add value
-- Sort products by market share for easier reading
-- Remove unnecessary elements
+**Requirements**: - Use points instead of bars - Include reference lines only where they add value - Sort products by market share for easier reading - Remove unnecessary elements
 
 ```{r exercise-4}
 # YOUR CODE HERE
@@ -138,18 +136,13 @@ glimpse(data)
 
 **Expected Output**: A dot plot that efficiently displays market share with minimal ink.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 5: Integrated Text and Graphics
 
 **Task**: Create a scatter plot showing the relationship between units sold and customer satisfaction, with integrated text annotations for outliers or points of interest.
 
-**Requirements**:
-- Add meaningful labels directly on or near important data points
-- Avoid overlapping text
-- Remove or minimize the legend
-- Use a minimal theme
-- Add a subtle reference line if it aids interpretation
+**Requirements**: - Add meaningful labels directly on or near important data points - Avoid overlapping text - Remove or minimize the legend - Use a minimal theme - Add a subtle reference line if it aids interpretation
 
 ```{r exercise-5}
 # YOUR CODE HERE
@@ -161,17 +154,13 @@ glimpse(data)
 
 **Expected Output**: A scatter plot where text and graphics work together to tell the story.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 6: Sparklines for Compact Trends
 
 **Task**: Create sparkline-style visualizations showing revenue trends for each product across all years. Sparklines are small, word-sized graphics embedded in text or tables.
 
-**Requirements**:
-- Create minimal line charts without axes
-- Remove all decorative elements
-- Focus on the shape of the trend
-- Make them small and compact
+**Requirements**: - Create minimal line charts without axes - Remove all decorative elements - Focus on the shape of the trend - Make them small and compact
 
 ```{r exercise-6}
 # YOUR CODE HERE
@@ -185,19 +174,13 @@ glimpse(data)
 
 **Expected Output**: Small, compact trend lines that show patterns at a glance.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 7: Avoid Misleading Scales
 
-**Task**: Create two versions of a chart showing revenue growth:
-1. A misleading version with a truncated y-axis
-2. A proper version with appropriate scaling
+**Task**: Create two versions of a chart showing revenue growth: 1. A misleading version with a truncated y-axis 2. A proper version with appropriate scaling
 
-**Requirements**:
-- First plot: Truncate y-axis to exaggerate differences
-- Second plot: Use full scale starting from zero
-- Add annotations explaining the difference
-- Discuss the implications in comments
+**Requirements**: - First plot: Truncate y-axis to exaggerate differences - Second plot: Use full scale starting from zero - Add annotations explaining the difference - Discuss the implications in comments
 
 ```{r exercise-7}
 # YOUR CODE HERE
@@ -211,17 +194,13 @@ glimpse(data)
 
 **Expected Output**: Two charts that demonstrate how scale choices affect perception.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 8: Range Frame Instead of Full Box
 
 **Task**: Create a scatter plot using Tufte's "range frame" concept, where axis lines only extend to the data range rather than creating a full box.
 
-**Requirements**:
-- Use `theme_tufte()` from ggthemes or create custom theme
-- Show only the data range on axes
-- Remove unnecessary grid lines
-- Focus attention on the data points
+**Requirements**: - Use `theme_tufte()` from ggthemes or create custom theme - Show only the data range on axes - Remove unnecessary grid lines - Focus attention on the data points
 
 ```{r exercise-8}
 # YOUR CODE HERE
@@ -233,17 +212,13 @@ glimpse(data)
 
 **Expected Output**: A plot with minimal framing that draws attention to the data.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 9: Data-Dense Table Graphic
 
 **Task**: Create a table-graphic hybrid showing regional performance metrics, combining numerical precision with visual encoding.
 
-**Requirements**:
-- Include small inline visualizations (e.g., bars or points)
-- Maintain alignment and readability
-- Remove table borders where they don't add value
-- Use subtle shading only if it improves readability
+**Requirements**: - Include small inline visualizations (e.g., bars or points) - Maintain alignment and readability - Remove table borders where they don't add value - Use subtle shading only if it improves readability
 
 ```{r exercise-9}
 # YOUR CODE HERE
@@ -257,18 +232,13 @@ glimpse(data)
 
 **Expected Output**: A data table enhanced with visual elements that aid quick comprehension.
 
----
+------------------------------------------------------------------------
 
 ## Exercise 10: Comprehensive Dashboard
 
 **Task**: Combine multiple Tufte-inspired visualizations into a single dashboard view showing the complete story of the sales data.
 
-**Requirements**:
-- Use small multiples where appropriate
-- Maintain consistent styling across all plots
-- Integrate text annotations to guide interpretation
-- Remove all chartjunk
-- Ensure the overall layout is clean and uncluttered
+**Requirements**: - Use small multiples where appropriate - Maintain consistent styling across all plots - Integrate text annotations to guide interpretation - Remove all chartjunk - Ensure the overall layout is clean and uncluttered
 
 ```{r exercise-10}
 # YOUR CODE HERE
@@ -281,18 +251,18 @@ glimpse(data)
 
 **Expected Output**: A cohesive, information-dense dashboard that tells the complete data story.
 
----
+------------------------------------------------------------------------
 
 ## Reflection Questions
 
 After completing the exercises, consider:
 
-1. How does reducing non-data ink change the effectiveness of your visualizations?
-2. In what situations might you deviate from strict Tufte principles, and why?
-3. How do small multiples facilitate comparison better than overlaid elements?
-4. What challenges did you encounter when trying to maximize the data-ink ratio?
+1.  How does reducing non-data ink change the effectiveness of your visualizations?
+2.  In what situations might you deviate from strict Tufte principles, and why?
+3.  How do small multiples facilitate comparison better than overlaid elements?
+4.  What challenges did you encounter when trying to maximize the data-ink ratio?
 
----
+------------------------------------------------------------------------
 
 ## Additional Resources
 
@@ -301,7 +271,7 @@ After completing the exercises, consider:
 - `ggthemes` package documentation: https://jrnold.github.io/ggthemes/
 - Cleveland, W. S. (1985). *The Elements of Graphing Data*
 
----
+------------------------------------------------------------------------
 
 ## Summary
 
