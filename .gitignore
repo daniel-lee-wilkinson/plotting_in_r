@@ -47,3 +47,19 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# renv library (user-local packages, not committed)
+renv/library/
+renv/python/
+renv/staging/
+renv/.cache/
+
+# Quarto rendered outputs
+analysis/*.html
+analysis/*_files/
+analysis/.quarto/
+.quarto/
+_site/
+
+# R project lock file for package management
+*.lock.bak
