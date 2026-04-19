@@ -274,8 +274,38 @@ ggplot(data, aes(x = units_sold, y = customer_satisfaction, col = product)) +
 # Hint: Consider using facet_wrap with strip.text for labels
 # and removing all theme elements for a true sparkline effect
 
+# find min and max per product
+endpoints <- data |>
+  group_by(product) |>
+  filter(revenue == min(revenue) | revenue == max(revenue))
 
-
+ggplot(data, aes(x = year, y = revenue)) +
+  geom_line(linewidth = 0.5, colour = "grey20") +
+  geom_point(data = endpoints, size = 1.5, colour = "grey20") +
+  geom_text(
+    data = endpoints |> filter(revenue == max(revenue)),
+    aes(label = scales::comma(revenue)),
+    vjust = -0.8, size = 3.5
+  ) +
+  geom_text(
+    data = endpoints |> filter(revenue == min(revenue)),
+    aes(label = scales::comma(revenue)),
+    vjust = 1.8, size = 3.5
+  ) +
+scale_x_continuous(expand = expansion(mult = c(0.2, 0.2))) +
+scale_y_continuous(limits = c(min(data$revenue), max(data$revenue))) +
+  facet_wrap(~ product, nrow = 1) +
+  theme_void() +
+  theme(
+    strip.text    = element_text(size = 10, colour = "grey40"),
+    panel.spacing = unit(0.5, "cm"),
+    plot.margin   = margin(10, 10, 10, 10),
+      panel.spacing.y  = unit(1, "cm"),
+  axis.ticks    = element_blank(),
+  axis.text     = element_blank(),
+  axis.line     = element_blank()
+)
+  )
 
 ```
 
