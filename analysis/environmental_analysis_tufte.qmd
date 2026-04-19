@@ -1,0 +1,272 @@
+---
+title: "Environmental Data Analysis"
+author: "plotting_in_r"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Overview
+
+This document analyses a sample environmental dataset containing measurements
+collected across multiple national park locations. The dataset includes
+**numerical**, **string**, and **categorical** variables.
+
+## Setup
+
+Load required packages. These are managed via `renv` — run `renv::restore()`
+once to install them before rendering this document.
+
+```{r}
+#| label: setup
+
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(here)
+library(ggbeeswarm)
+library(mgcv)
+```
+
+## Load Data
+
+```{r}
+#| label: load-data
+
+env_data <- read_csv(
+  here::here("data", "environmental_data.csv"),
+  col_types = cols(
+    sample_id       = col_character(),
+    date            = col_date(format = "%Y-%m-%d"),
+    location        = col_character(),
+    observer_name   = col_character(),
+    season          = col_factor(levels = c("Spring", "Summer", "Autumn", "Winter")),
+    weather_condition = col_factor(),
+    land_use_type   = col_factor(),
+    temperature_c   = col_double(),
+    humidity_pct    = col_double(),
+    wind_speed_kmh  = col_double(),
+    precipitation_mm = col_double(),
+    air_quality_index = col_integer(),
+    uv_index        = col_double(),
+    visibility_km   = col_double()
+  )
+)
+
+
+```
+
+### Variable Overview
+
+| Variable | Type | Description |
+|---|---|---|
+| `sample_id` | String | Unique record identifier |
+| `date` | String / Date | Date of observation |
+| `location` | String | National park name |
+| `observer_name` | String | Name of field observer |
+| `season` | Categorical | Season of observation |
+| `weather_condition` | Categorical | Observed weather type |
+| `land_use_type` | Categorical | Ecosystem / land-use classification |
+| `temperature_c` | Numerical | Air temperature (°C) |
+| `humidity_pct` | Numerical | Relative humidity (%) |
+| `wind_speed_kmh` | Numerical | Wind speed (km/h) |
+| `precipitation_mm` | Numerical | Precipitation (mm) |
+| `air_quality_index` | Numerical | AQI score |
+| `uv_index` | Numerical | UV radiation index |
+| `visibility_km` | Numerical | Atmospheric visibility (km) |
+
+## Summary Statistics
+
+```{r}
+#| label: summary-stats using skimr package
+
+skimr::skim(env_data)
+```
+
+### Observations per Season
+
+```{r}
+#| label: season-counts
+
+env_data |>
+  count(season, name = "n_observations") |>
+  arrange(season)
+```
+
+## Visualisations
+
+### Temperature Distribution by Season
+
+```{r}
+#| label: fig-temp-season
+#| fig-cap: "Distribution of temperature (°C) for each season."
+
+ggplot(env_data, aes(x = season, y = temperature_c, fill = season)) +
+  #geom_boxplot(alpha = 0.7, outlier.shape = 21, fill="grey80") +
+  geom_beeswarm(size = 1.5, alpha = 0.6) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Temperature Distribution by Season",
+    x = "Season",
+    y = "Temperature (°C)"
+  ) +
+  theme_tufte(base_size = 13) +
+  theme(legend.position = "none") + 
+  coord_flip()
+
+ggplot(env_data, aes(x = season, y = temperature_c)) +
+  stat_summary(fun = mean, geom = "errorbar",
+               aes(ymax = ..y.., ymin = ..y..),
+               width = 0.3, linewidth = 0.5, colour = "grey20") +
+  geom_jitter(width = 0.1, size = 1.5, alpha = 0.5, colour = "grey50") +
+  stat_summary(fun = mean, geom = "point",
+               size = 3, shape = 18, colour = "#4a90a4") +
+  theme(
+    panel.grid       = element_blank(),
+    panel.background = element_blank(),
+    panel.border     = element_blank(),
+    axis.line.y      = element_line(linewidth = 0.3, colour = "grey40"),
+    axis.line.x      = element_blank(),
+    axis.ticks       = element_blank()
+  ) +
+  labs(x = NULL, y = "Temperature (°C)",
+       title = "Summer temperatures far exceed other seasons") +
+        coord_flip()
+```
+
+### Temperature vs. Humidity
+
+```{r}
+#| label: fig-temp-humidity
+#| fig-cap: "Scatter plot of temperature against humidity coloured by season."
+
+ggplot(env_data, aes(x = temperature_c, y = humidity_pct, colour = season)) +
+  geom_point(alpha = 0.7, size = 2.5) +
+geom_smooth(method = "gam", se = FALSE, linewidth = 0.3) +
+xlim(-20, 40) +
+    ylim(20, 100) +
+  labs(
+    title = "Temperature vs. Humidity",
+    x = "Temperature (°C)",
+    y = "Humidity (%)",
+    colour = "Season"
+  ) +  
+      theme_tufte(base_size = 13) +
+      theme(plot.title   = element_text(size = 12), 
+      strip.text = element_text(size = 11))  +
+ facet_wrap(~season, ncol=2) + theme(legend.position = "none") 
+
+
+```
+
+### Air Quality Index by Land Use Type
+
+```{r}
+#| label: fig-aqi-landuse
+#| fig-cap: "Air Quality Index distribution across land use categories."
+
+env_data |>
+  group_by(land_use_type) |>
+  summarise(
+    mean_aqi  = mean(air_quality_index),
+    se_aqi    = sd(air_quality_index) / sqrt(n()),
+    n         = n()
+  ) |>
+  ggplot(aes(x = reorder(land_use_type, mean_aqi), y = mean_aqi, fill = land_use_type)) +
+  geom_col(alpha = 0.8) +
+  geom_errorbar(aes(ymin = mean_aqi - se_aqi, ymax = mean_aqi + se_aqi), width = 0.3) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Mean Air Quality Index by Land Use Type",
+    x = "Land Use Type",
+    y = "Mean AQI",
+    caption = "Error bars show ±1 SE"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+```
+
+### Precipitation Heatmap: Season × Weather Condition
+
+```{r}
+#| label: fig-precip-heatmap
+#| fig-cap: "Mean precipitation (mm) by season and weather condition."
+
+env_data |>
+  group_by(season, weather_condition) |>
+  summarise(mean_precip = mean(precipitation_mm), .groups = "drop") |>
+  ggplot(aes(x = season, y = weather_condition, fill = mean_precip)) +
+  geom_tile(colour = "white", linewidth = 0.5) +
+  scale_fill_viridis_c(option = "plasma", name = "Precipitation\n(mm)") +
+  labs(
+    title = "Mean Precipitation by Season and Weather Condition",
+    x = "Season",
+    y = "Weather Condition"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+### Wind Speed Distribution
+
+```{r}
+#| label: fig-wind-dist
+#| fig-cap: "Histogram of wind speed coloured by weather condition."
+
+ggplot(env_data, aes(x = wind_speed_kmh, fill = weather_condition)) +
+  geom_histogram(binwidth = 5, colour = "white", alpha = 0.85) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(
+    title = "Wind Speed Distribution by Weather Condition",
+    x = "Wind Speed (km/h)",
+    y = "Count",
+    fill = "Weather Condition"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+## Correlation Analysis
+
+```{r}
+#| label: fig-correlation
+#| fig-cap: "Pairwise correlation matrix for numerical variables."
+
+cor_matrix <- env_data |>
+  select(all_of(numerical_vars)) |>
+  cor(use = "complete.obs")
+
+cor_long <- as.data.frame(as.table(cor_matrix)) |>
+  rename(var1 = Var1, var2 = Var2, correlation = Freq)
+
+ggplot(cor_long, aes(x = var1, y = var2, fill = correlation)) +
+  geom_tile(colour = "white") +
+  geom_text(aes(label = round(correlation, 2)), size = 3) +
+  scale_fill_gradient2(
+    low = "#0571b0", mid = "white", high = "#ca0020",
+    midpoint = 0, limits = c(-1, 1), name = "Correlation"
+  ) +
+  labs(
+    title = "Correlation Matrix — Numerical Variables",
+    x = NULL, y = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Session Information
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```
