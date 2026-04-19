@@ -22,7 +22,7 @@ This document provides practice exercises in creating data visualizations that a
 
 ## Dataset Description
 
-I'll be working with a sample sales dataset (`sample_data.csv`) containing:
+We'll be working with a sales dataset (`sample_data.csv`) containing:
 
 - **year**: Year of observation (2020-2023)
 - **region**: Geographic region (North, South, East, West)
@@ -57,8 +57,6 @@ glimpse(data)
 
 ```{r exercise-1}
 # YOUR CODE HERE
-data <- data |>
-   mutate(product = gsub("_", " ", product)) 
 data |>
   mutate(region = factor(region, levels = c("North", "East", "South", "West"))) |>
   ggplot(aes(x = year, y = revenue, color = product)) +
@@ -69,9 +67,6 @@ data |>
     aes(label = product),
     hjust = -0.1, size = 3
   ) +
-      scale_colour_manual(values = c("Product A" = "grey20",
-                                 "Product B" = "grey60",
-                                 "Product C" = "#4a90a4")) +
   coord_cartesian(clip = "off") +
   theme(
     panel.grid       = element_blank(),
@@ -135,6 +130,8 @@ geom_hline(yintercept = seq(50000, max(data$revenue), by = 50000),
 
 ```{r exercise-3}
 # YOUR CODE HERE
+
+data <- data |> mutate(product = gsub("_", " ", product))
 
 ggplot(data, aes(x = year, y = revenue, col = product)) + 
   geom_line() + 
@@ -611,7 +608,6 @@ grid.arrange(
 
 1.  How does reducing non-data ink change the effectiveness of your visualizations?
     - reduced visual distractions
-    - quicker to determine the key message
 2.  In what situations might you deviate from strict Tufte principles, and why?
     - when memorability or engagement (through e.g. colour) are priorities
     - removing gridlines, for example, can stop you from seeing exact values
