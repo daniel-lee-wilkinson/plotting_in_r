@@ -2,13 +2,19 @@
 
 This repository contains practice exercises for creating data visualizations in R that follow Edward Tufte's principles of effective graphical design.
 
-![Range frame scatter plot](images/exercise-8-1.png)
+![Range frame scatter plot](tufte_visualization_exercises_files/figure-html/exercise-8-1.png)
 
-## Contents
+## Repository Structure
 
-- **tufte_visualization_exercises.qmd** - Quarto document with 10 practice exercises focused on Tufte graphing principles
-- **sample_data.csv** - Sample sales dataset for the exercises
-- **generate_sample_data.R** - R script to regenerate the sample dataset
+### Tufte Visualization Exercises (complete)
+- `tufte_visualization_exercises.qmd` — main exercises document
+- `tufte_visualization_exercises.html` — rendered output
+- `sample_data.csv` — dataset used in exercises
+- `generate_sample_data.R` — script to regenerate the dataset
+
+### Second Project (work in progress)
+- `analysis/` — work in progress
+- `data/` — work in progress
 
 ## Getting Started
 
