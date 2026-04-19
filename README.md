@@ -2,6 +2,8 @@
 
 This repository contains practice exercises for creating data visualizations in R that follow Edward Tufte's principles of effective graphical design.
 
+![Range frame scatter plot](images/exercise-8-1.png)
+
 ## Contents
 
 - **tufte_visualization_exercises.qmd** - Quarto document with 10 practice exercises focused on Tufte graphing principles
@@ -10,12 +12,13 @@ This repository contains practice exercises for creating data visualizations in 
 
 ## Getting Started
 
-1. Ensure you have R and RStudio installed
+1. Ensure you have R and RStudio or Positron (R IDE) installed
 2. Install required packages:
    ```r
-   install.packages(c("tidyverse", "ggplot2", "ggthemes", "quarto"))
+   # restore the project environment
+   renv::restore()
    ```
-3. Open `tufte_visualization_exercises.qmd` in RStudio
+3. Open `tufte_visualization_exercises.qmd` in the R IDE
 4. Work through the exercises, creating visualizations that maximize data-ink ratio and minimize chartjunk
 
 ## Tufte's Key Principles

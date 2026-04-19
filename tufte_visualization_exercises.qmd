@@ -11,7 +11,7 @@ format:
 execute:
   warning: false
   message: false
-
+date: today
 editor: visual
 ---
 
@@ -47,12 +47,18 @@ library(ggthemes)
 library(gridExtra)
 library(cowplot)
 library(grid)
+library(skimr)
 
-# Read the data
+# Read the raw data
 data <- read_csv("sample_data.csv")
+# Check first rows, names and dtypes
+head(data)
+# Change products from Product_X to "Product X"
+data <- data |>
+   mutate(product = gsub("_", " ", product))
 
-# Preview the data structure
-glimpse(data)
+# look at structure and statistics of dataset
+skimr::skim(data)
 ```
 
 ------------------------------------------------------------------------
@@ -64,9 +70,7 @@ glimpse(data)
 **Requirements**: - Remove unnecessary grid lines - Minimize or remove axis lines where appropriate - Use direct labels instead of a legend - Remove background shading - Keep only essential elements
 
 ```{r exercise-1}
-# YOUR CODE HERE
-data <- data |>
-   mutate(product = gsub("_", " ", product)) 
+
 data |>
   mutate(region = factor(region, levels = c("North", "East", "South", "West"))) |>
   ggplot(aes(x = year, y = revenue, color = product)) +
@@ -106,7 +110,7 @@ data |>
 **Requirements**: - Remove grid lines - Remove chart borders - Use subtle colors or grayscale - Label bars directly (no legend needed) - Remove unnecessary axis elements
 
 ```{r exercise-2}
-# YOUR CODE HERE
+
 data |> 
   filter(year == 2023) |> 
   ggplot(aes(x = product, y = revenue)) + 
@@ -142,7 +146,7 @@ geom_hline(yintercept = seq(50000, max(data$revenue), by = 50000),
 **Requirements**: - Use faceting to create one subplot per region - Maintain consistent scales for valid comparison - Minimize repetitive axis labels - Remove unnecessary decorative elements - Ensure each panel is clearly labeled
 
 ```{r exercise-3}
-# YOUR CODE HERE
+
 
 ggplot(data, aes(x = year, y = revenue, col = product)) + 
   geom_line() + 
@@ -193,7 +197,7 @@ geom_text(
 **Requirements**: - Use points instead of bars - Include reference lines only where they add value - Sort products by market share for easier reading - Remove unnecessary elements
 
 ```{r exercise-4}
-# YOUR CODE HERE
+
 data |>
   filter(year == 2023) |>
   arrange(region, market_share) |>
@@ -313,7 +317,7 @@ ggplot(data_spark, aes(x = year, y = revenue)) +
       plot.caption     = element_text(colour = "grey60")
   ) +
   
-labs(caption = "Values shown are averages across all four regions")
+labs(caption = "Revenue (USD) values are averages across all four regions")
 ```
 
 **Expected Output**: Small, compact trend lines that show patterns at a glance.
@@ -389,7 +393,7 @@ ggplot(data, aes(x = units_sold, y = revenue)) +
             linewidth = 0.3, colour = "grey60") +
   theme_tufte() +
   labs(x = "Units sold", y = "",
-       title = "Revenue scales (USD) with units sold")
+       title = "Revenue (USD) scales with units sold")
 ```
 
 **Expected Output**: A plot with minimal framing that draws attention to the data.
@@ -615,14 +619,15 @@ grid.arrange(
 2.  In what situations might you deviate from strict Tufte principles, and why?
     - when memorability or engagement (through e.g. colour) are priorities
     - removing gridlines, for example, can stop you from seeing exact values
-    - to add contextual elements like trend lines
+    - to add contextual elements like trend lines (e.g. exercise 8)
 3.  How do small multiples facilitate comparison better than overlaid elements?
     - reduce clutter and overlapping
     - it is easier to isolate patterns in the data
     - enforces consistent scales
     - highlight outliers and trends
 4.  What challenges did you encounter when trying to maximize the data-ink ratio?
-    - it requires many manual code adjustments, especially to the theme. This means that plotting according to tufte principles cannot be easily automated because of the difference in meaning/intention even between two plots of the same type and data types.
+    - it requires many manual code adjustments, especially to the theme.
+    - correctly positioning text labels was delicate
 
 ------------------------------------------------------------------------
 
