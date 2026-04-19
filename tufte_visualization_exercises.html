@@ -221,7 +221,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-1-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -260,7 +260,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-2-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -314,7 +314,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-3-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -355,7 +355,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-4-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -370,41 +370,43 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> units_sold, <span class="at">y =</span> customer_satisfaction, <span class="at">col =</span> product)) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">substr</span>(region, <span class="dv">1</span>, <span class="dv">1</span>)), <span class="at">size =</span> <span class="dv">4</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="fu">min</span>(year), region <span class="sc">==</span> <span class="st">"North"</span>),</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> product),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">nudge_x =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">fontface =</span> <span class="st">"bold"</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_text</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="fu">min</span>(year), region <span class="sc">==</span> <span class="st">"North"</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">label =</span> product),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">nudge_x =</span> <span class="dv">20</span>, <span class="at">nudge_y =</span> <span class="fl">0.35</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">fontface =</span> <span class="st">"bold"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)<span class="sc">+</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(year <span class="sc">~</span> .) <span class="sc">+</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Product A"</span> <span class="ot">=</span> <span class="st">"grey20"</span>,</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Product B"</span> <span class="ot">=</span> <span class="st">"grey60"</span>,</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Product C"</span> <span class="ot">=</span> <span class="st">"#4a90a4"</span>)) <span class="sc">+</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="at">by =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>), <span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid       =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border     =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line        =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks       =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position  =</span> <span class="st">"none"</span>,</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y      =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text.y     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin      =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">60</span>),</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.spacing.y  =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>),</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption     =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"grey60"</span>),</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Number of Units Sold"</span>, <span class="at">y =</span> <span class="st">"Customer Satisfaction (1-5)"</span>,</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Number of Units Sold Correlates Positively with Customer Satisfaction Across All Years"</span>,</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"The regions are indicated by 'N'='North', 'E'='East', 'S'='South', 'W'='West'. </span><span class="sc">\n</span><span class="st">Product A is in dark grey, Product B is light grey, and Product C is blue."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="fu">min</span>(data<span class="sc">$</span>units_sold), <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="fu">max</span>(data<span class="sc">$</span>units_sold))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">3.5</span>, <span class="dv">5</span>), <span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid       =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border     =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line        =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks       =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position  =</span> <span class="st">"none"</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y      =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text.y     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin      =</span> <span class="fu">margin</span>(<span class="at">r =</span> <span class="dv">60</span>),</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.spacing.y  =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>),</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption     =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"grey60"</span>),</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Number of Units Sold"</span>, <span class="at">y =</span> <span class="st">"Customer Satisfaction (1-5)"</span>,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Number of Units Sold Correlates Positively with Customer Satisfaction Across All Years"</span>,</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"The regions are indicated by 'N'='North', 'E'='East', 'S'='South', 'W'='West'."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-5-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -454,7 +456,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-6-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -502,7 +504,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-7-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -534,7 +536,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-8-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -595,7 +597,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-9-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -748,7 +750,7 @@ $ market_share          &lt;dbl&gt; 18.5, 15.2, 22.1, 19.8, 13.7, 23.4, 17.9, 16
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tufte_visualization_exercises_files/figure-html/exercise-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tufte_visualization_exercises_files/figure-html/exercise-10-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>

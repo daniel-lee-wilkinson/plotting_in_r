@@ -6,9 +6,12 @@ format:
     toc: true
     code-fold: false
     theme: cosmo
+    fig-width: 8
+    fig-height: 6
 execute:
   warning: false
   message: false
+
 editor: visual
 ---
 
@@ -230,17 +233,19 @@ theme(panel.spacing.y = unit(0.5, "cm")) +
 ```{r exercise-5}
 ggplot(data, aes(x = units_sold, y = customer_satisfaction, col = product)) +
   geom_text(aes(label = substr(region, 1, 1)), size = 4, show.legend = FALSE) +
-  geom_text(
-    data = data |> filter(year == min(year), region == "North"),
-    aes(label = product),
-    hjust = 0, nudge_x = 20, size = 2.5, fontface = "bold"
-  ) +
+geom_text(
+  data = data |> filter(year == min(year), region == "North"),
+  aes(label = product),
+  hjust = 0, nudge_x = 20, nudge_y = 0.35, size = 3, fontface = "bold"
+)+
   facet_grid(year ~ .) +
   scale_colour_manual(values = c("Product A" = "grey20",
                                  "Product B" = "grey60",
                                  "Product C" = "#4a90a4")) +
   scale_y_continuous(breaks = seq(3, 5, by = 0.5)) +
-  coord_cartesian(ylim = c(3, 5), clip = "off") +
+  scale_x_continuous(breaks = c(min(data$units_sold), 400, 500, 600, max(data$units_sold))
+) +
+  coord_cartesian(ylim = c(3.5, 5), clip = "off") +
   theme(
     panel.grid       = element_blank(),
     panel.border     = element_blank(),
@@ -260,7 +265,7 @@ ggplot(data, aes(x = units_sold, y = customer_satisfaction, col = product)) +
   ) +
   labs(x = "Number of Units Sold", y = "Customer Satisfaction (1-5)",
        title = "Number of Units Sold Correlates Positively with Customer Satisfaction Across All Years",
-       caption = "The regions are indicated by 'N'='North', 'E'='East', 'S'='South', 'W'='West'. \nProduct A is in dark grey, Product B is light grey, and Product C is blue.")
+       caption = "The regions are indicated by 'N'='North', 'E'='East', 'S'='South', 'W'='West'.")
 ```
 
 **Expected Output**: A scatter plot where text and graphics work together to tell the story.
