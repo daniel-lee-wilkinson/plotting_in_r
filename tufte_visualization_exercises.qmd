@@ -6,6 +6,9 @@ format:
     toc: true
     code-fold: false
     theme: cosmo
+execute:
+  warning: false
+  message: false
 editor: visual
 ---
 
@@ -37,8 +40,10 @@ I'll be working with a sample sales dataset (`sample_data.csv`) containing:
 ```{r setup, message=FALSE, warning=FALSE}
 # Load required libraries
 library(tidyverse)
-library(ggplot2)
 library(ggthemes)
+library(gridExtra)
+library(cowplot)
+library(grid)
 
 # Read the data
 data <- read_csv("sample_data.csv")
@@ -106,7 +111,7 @@ geom_col(fill = "grey80", colour = NA) +
 geom_hline(yintercept = seq(50000, max(data$revenue), by = 50000),
            colour = "white", linewidth = 0.8) + 
   facet_wrap(~ region, labeller = labeller(region = toupper)) +
-  geom_text(aes(label = scales::comma(revenue)), vjust = -0.5, size = 3) +
+  geom_text(aes(label = scales::dollar(revenue)), vjust = -0.5, size = 3) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   theme(
     panel.grid       = element_blank(),
@@ -147,7 +152,7 @@ ggplot(data, aes(x = year, y = revenue, col = product)) +
 scale_y_continuous(
   limits = c(80000, 240000),
   breaks = c(80000, 120000, 160000, 200000, 240000),
-  labels = scales::comma,
+  labels = scales::dollar,
   expand = c(0, 0)
 )+
   theme(
@@ -194,7 +199,7 @@ data |>
   geom_segment(aes(x = min(market_share) -1 , xend = market_share, yend = product),
                colour = "grey80", linewidth = 0.3) +
   geom_point(size = 3, colour = "#4a90a4") +
-geom_text(aes(label = round(market_share, 1)),
+geom_text(aes(label = paste0(round(market_share, 1), " %")),
           hjust = -0.5, size = 3) +
 coord_cartesian(clip = "off") +
 theme(plot.margin = margin(r = 20)) +
@@ -269,9 +274,7 @@ ggplot(data, aes(x = units_sold, y = customer_satisfaction, col = product)) +
 **Requirements**: - Create minimal line charts without axes - Remove all decorative elements - Focus on the shape of the trend - Make them small and compact
 
 ```{r exercise-6}
-# YOUR CODE HERE
-# Hint: Consider using facet_wrap with strip.text for labels
-# and removing all theme elements for a true sparkline effect
+
 data_spark <- data |>
   group_by(product, year) |>
   summarise(revenue = mean(revenue), .groups = "drop")
@@ -319,10 +322,6 @@ labs(caption = "Values shown are averages across all four regions")
 **Requirements**: - First plot: Truncate y-axis to exaggerate differences - Second plot: Use full scale starting from zero - Add annotations explaining the difference - Discuss the implications in comments
 
 ```{r exercise-7}
-# YOUR CODE HERE
-library(cowplot)
-library(grid)
-pushViewport(viewport(layout = grid.layout(1, 2)))
 
 data_2023 <- data |> filter(year == 2023) |>
   group_by(product) |>
@@ -369,18 +368,23 @@ plot_grid(title, plot_grid(p1, p2, ncol = 2),
 **Requirements**: - Use `theme_tufte()` from ggthemes or create custom theme - Show only the data range on axes - Remove unnecessary grid lines - Focus attention on the data points
 
 ```{r exercise-8}
-# YOUR CODE HERE
-
-
-
-library(ggthemes)
 
 ggplot(data, aes(x = units_sold, y = revenue)) +
   geom_point(colour = "grey40", size = 2, alpha = 0.7) +
   geom_rangeframe() +
+  scale_y_continuous(
+    breaks = c(min(data$revenue), max(data$revenue)),
+    labels = scales::dollar
+  ) +
+  scale_x_continuous(
+    breaks = c(min(data$units_sold), max(data$units_sold)),
+    labels = scales::comma
+  ) +
+    geom_smooth(method = "lm", se = FALSE, 
+            linewidth = 0.3, colour = "grey60") +
   theme_tufte() +
-  labs(x = "Units sold", y = "Revenue (USD)",
-       title = "Revenue scales with units sold")
+  labs(x = "Units sold", y = "",
+       title = "Revenue scales (USD) with units sold")
 ```
 
 **Expected Output**: A plot with minimal framing that draws attention to the data.
@@ -394,10 +398,6 @@ ggplot(data, aes(x = units_sold, y = revenue)) +
 **Requirements**: - Include small inline visualizations (e.g., bars or points) - Maintain alignment and readability - Remove table borders where they don't add value - Use subtle shading only if it improves readability
 
 ```{r exercise-9}
-# YOUR CODE HERE
-# Hint: Consider using geom_point or geom_segment within facets
-# to create table-like layouts with visual elements
-library(gridExtra)
 
 data_table <- data |>
   filter(year == 2023) |>
@@ -457,11 +457,6 @@ grid.arrange(p_text, p_bars, ncol = 2, widths = c(2.5, 1),
 **Requirements**: - Use small multiples where appropriate - Maintain consistent styling across all plots - Integrate text annotations to guide interpretation - Remove all chartjunk - Ensure the overall layout is clean and uncluttered
 
 ```{r exercise-10}
-# YOUR CODE HERE
-# Hint: Consider using patchwork or cowplot packages for layout
-
-
-library(gridExtra)
 
 # panel 1 — revenue trend by product (sparkline style)
 data_spark <- data |>
